@@ -19,9 +19,12 @@ def preprocessing_dataframes_save_to_cvs(output_cvs, dframes):
     for dframe, class_df in dframes:
         for col_apk in dframe.columns:
             json_str = dframe[col_apk]['Static_analysis']
+            
             df_static_analysis = pd.json_normalize(json_str)
+            
             df_static_analysis.drop(
                 [col for col in df_static_analysis.columns if is_to_drop(col)], axis=1, inplace=True)
+            
             permissions = df_static_analysis.pop('Permissions')[0]
 
             for perm in permissions:

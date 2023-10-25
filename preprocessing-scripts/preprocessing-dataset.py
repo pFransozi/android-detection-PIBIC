@@ -40,18 +40,12 @@ def preprocessing_dataframes_save_to_cvs(output_cvs, dframes):
         dfs_permissions = pd.concat([dfs_permissions, dfs_tmp])
 
     dfs_opcodes.fillna(0, inplace=True)
-    dfs_opcodes.reset_index(drop=True)
-    # dfs_opcodes.drop(['index'], axis=1, inplace=True)
     dfs_opcodes.to_csv(os.path.join(output_cvs, "opcodes.csv"))
 
     dfs_apicalls.fillna(0, inplace=True)
-    # dfs_apicalls.drop(['index'], axis=1, inplace=True)
-    dfs_apicalls.reset_index(drop=True)
     dfs_apicalls.to_csv(os.path.join(output_cvs, "apicalls.csv"))
 
     dfs_permissions.fillna(0, inplace=True)
-    dfs_permissions.reset_index(drop=True)
-    # dfs_permissions.drop(['index'], axis=1, inplace=True)
     dfs_permissions.to_csv(os.path.join(output_cvs, "permissions.csv"))
 
 
@@ -81,17 +75,15 @@ def load_json(input_dir, classification, batch):
                 pd_json = pd.read_json(entry.path)
 
                 if batch == BATCH:
-                    # pd_json_tmp = pd.DataFrame.from_dict(pd_json["0B5146FFAFEA66C64076D3B61C326FA14CE729BE978788C150763D9D66E96735"]["Static_analysis"])
                     for col_apk in pd_json.columns:
                         pd_json_tmp = pd_json[col_apk]["Static_analysis"]
                         dframes.append((pd_json_tmp, classification))
                 else:
-                    dframes.append((pd_json["Static_analysis"].to_frame()[
-                                   "Static_analysis"], classification))
+                    dframes.append((pd_json["Static_analysis"].to_frame()["Static_analysis"], classification))
 
     if len(dframes) == 0:
         print(
-            f'No json file found: directory {input_dir}, classification {classification}')
+            f'No json file found: directory {input_dir}')
 
     return dframes
 
